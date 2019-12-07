@@ -1,0 +1,8 @@
+@namespace ("demo.service.api.person")
+protocol PersonService
+{
+    import schema "Person.avsc";
+    import schema "QueryParameter.avsc";
+    string ping();
+    array<demo.service.api.person.Person> getPersonList(demo.service.api.person.QueryParameter queryParameter);
+}

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <dubbo:application name="hello-service-producer" organization="github" owner="yjmyzz" version="1.0"/>
+
+    <dubbo:registry protocol="zookeeper"
+                    address="zookeeper://127.0.0.1:2181"/>
+
+    <!--<dubbo:monitor protocol="registry"/>-->
+
+    <dubbo:protocol name="dubbo" port="6011" serialization="kryo"
+                    optimizer="demo.service.api.SerializationOptimizerImpl" server="netty" iothreads="10"
+                    threads="500"/>
+
+    <dubbo:protocol name="avro" port="40001"/>
+
+    <dubbo:protocol name="thrift2" port="33201"/>
+
+    <dubbo:protocol name="rest" port="6051" threads="500" server="tomcat" accepts="500"
+                    contextpath="services" extension="demo.extension.ValidationExceptionMapper"/>
+
+    <dubbo:service interface="demo.service.api.person.PersonService" protocol="avro"
+                   ref="personService" timeout="10000" filter="serviceFilter"/>
+
+    <dubbo:service interface="demo.service.api.user.UserService" protocol="dubbo"
+                   ref="userService" timeout="10000" filter="serviceFilter"/>
+
+    <dubbo:service interface="demo.service.api.user.UserRestService" ref="userRestService" protocol="rest"
+                   validation="true" timeout="10000" connections="100" filter="serviceFilter"/>
+
+    <dubbo:service interface="demo.service.api.order.OrderService$Iface" protocol="thrift2"
+                   ref="orderService" timeout="10000" filter="serviceFilter"/>
+
+
+</beans>

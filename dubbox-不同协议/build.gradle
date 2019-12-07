@@ -1,0 +1,147 @@
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven'
+
+    group = 'com.cnblogs.yjmyzz'
+    version = '1.0-SNAPSHOT'
+
+    targetCompatibility = 1.8
+    sourceCompatibility = 1.8
+
+    [compileJava, compileTestJava].each() {
+        it.options.compilerArgs += ["-Xlint:unchecked", "-Xlint:deprecation", "-Xlint:-options"]
+        it.options.encoding = "UTF-8"
+    }
+
+    buildscript {
+        repositories {
+            maven {
+                url "https://plugins.gradle.org/m2/"
+            }
+        }
+        dependencies {
+            classpath "com.commercehub.gradle.plugin:gradle-avro-plugin:0.8.0"
+            classpath "gradle.plugin.org.jruyi.gradle:thrift-gradle-plugin:0.3.1"
+        }
+    }
+
+    repositories {
+        mavenLocal()
+        maven {
+            url 'http://114.80.88.52:9001/nexus/content/groups/public/'
+        }
+        maven {
+            url 'http://maven.aliyun.com/nexus/content/groups/public/'
+        }
+        mavenCentral()
+    }
+
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives sourcesJar
+    }
+
+    sourceSets {
+        main {
+            java {
+                srcDirs = ['src/main/java', 'src/main/thrift-java']
+            }
+            resources {
+                srcDirs = ['src/main/resources']
+            }
+        }
+        test {
+            java {
+                srcDirs = ['src/test/java', 'src/test/thrift']
+            }
+            resources {
+                srcDirs = ['src/test/resources']
+            }
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor 1, 'minutes'
+    }
+
+    dependencies {
+        compile 'org.projectlombok:lombok:1.16.8'
+
+        compile 'org.hibernate:hibernate-validator:5.2.2.Final'
+
+        compile 'javax.validation:validation-api:1.1.0.Final'
+        compile 'javax.ws.rs:javax.ws.rs-api:2.0'
+        compile 'javax.annotation:javax.annotation-api:1.2'
+        compile 'javax.el:javax.el-api:3.0.0'
+        compile 'javax.xml.bind:jaxb-api:2.2.7'
+
+        compile 'org.springframework:spring-core:4.2.5.RELEASE'
+        compile 'org.springframework:spring-context-support:4.2.5.RELEASE'
+        compile 'org.springframework:spring-beans:4.2.5.RELEASE'
+        compile 'org.springframework:spring-oxm:4.2.5.RELEASE'
+        compile "org.springframework:spring-jms:4.2.5.RELEASE"
+        compile 'org.springframework.retry:spring-retry:1.1.2.RELEASE'
+        compile('org.springframework:spring-context:4.2.5.RELEASE') {
+            exclude(module: 'commons-logging')
+        }
+        compile("com.101tec:zkclient:0.8.1") {
+            exclude(module: 'log4j')
+            exclude(module: 'slf4j-log4j12')
+        }
+        compile('org.apache.zookeeper:zookeeper:3.4.8') {
+            exclude(module: 'log4j')
+            exclude(module: 'slf4j-log4j12')
+        }
+        compile('com.alibaba:dubbo:2.8.5-SNAPSHOT') {
+            exclude(module: 'log4j')
+            exclude(module: 'logback-classic')
+            exclude(module: 'slf4j-log4j12')
+        }
+        compile 'org.gearman.jgs:java-gearman-service:0.7.0'
+        compile "org.apache.activemq:activemq-client:5.13.3"
+        compile "org.apache.activemq:activemq-pool:5.13.3"
+        compile 'org.apache.commons:commons-pool2:2.4.2'
+        compile 'org.slf4j:slf4j-api:1.7.15'
+        compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.5'
+        compile 'org.apache.logging.log4j:log4j-core:2.5'
+        compile 'org.aspectj:aspectjrt:1.8.7'
+        compile 'org.aspectj:aspectjweaver:1.8.7'
+
+        compile 'org.glassfish.web:javax.el:2.2.6'
+
+        compile "org.apache.avro:avro:1.8.0"
+        compile "org.apache.avro:avro-ipc:1.8.0"
+        compile 'org.apache.thrift:libthrift:0.9.3'
+
+        compile 'org.jboss.resteasy:resteasy-client:3.0.9.Final'
+        compile 'org.jboss.resteasy:resteasy-jaxrs:3.0.9.Final'
+        compile 'org.jboss.resteasy:resteasy-netty:3.0.14.Final'
+        compile 'org.jboss.resteasy:resteasy-jackson-provider:3.0.14.Final'
+        compile 'org.jboss.resteasy:resteasy-jaxb-provider:3.0.16.Final'
+
+        compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.12'
+
+        compile 'com.esotericsoftware.kryo:kryo:2.24.0'
+        compile 'de.javakaffee:kryo-serializers:0.37'
+
+        compile 'javax.el:javax.el-api:3.0.0'
+        compile 'org.glassfish.web:javax.el:2.2.6'
+
+        compile 'io.grpc:grpc-netty:1.0.1'
+        compile 'io.grpc:grpc-protobuf:1.0.1'
+        compile 'io.grpc:grpc-stub:1.0.1'
+
+        compile 'org.apache.tomcat.embed:tomcat-embed-core:8.0.11'
+        compile 'org.apache.tomcat.embed:tomcat-embed-logging-juli:8.0.11'
+
+        compile 'org.jboss.netty:netty:3.2.10.Final'
+        compile 'io.netty:netty-all:4.0.34.Final'
+
+        testCompile "junit:junit:4.12"
+    }
+}

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "demo.service.api";
+option java_outer_classname = "DemoProto";
+
+package demo;
+
+service DemoService {
+    rpc ping (PingRequest) returns (PingResponse) {}
+}
+
+message PingRequest{}
+
+message PingResponse {
+    string message = 1;
+}

@@ -1,0 +1,30 @@
+apply plugin: 'application'
+
+version = '1.0'
+def artifactId = "demo-service-provider"
+
+dependencies {
+    compile project(':demo-service-api')
+}
+
+task deleteBat(type: Delete, dependsOn: [clean, installDist]) {
+    delete "$buildDir/install/$artifactId/bin/demo-service-provider.bat"
+}
+
+task copyConfig(type: Copy, dependsOn: [deleteBat]) {
+
+    sourceSets.main.resources.srcDirs.each {
+        from it
+        into "$buildDir/install/$artifactId/bin/resources"
+    }
+
+}
+
+task pack(type: Copy, dependsOn: [copyConfig]) {
+    //from "$projectDir/src/bash/run.sh"
+    //into "$buildDir/install/$artifactId/bin"
+}
+
+mainClassName = 'demo.service.ServiceProvider'
+
+mainClassName="demo.service.ServiceProvider"
